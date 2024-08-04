@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:12:23 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/04 13:14:56 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:27:04 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ t_data	*parsing_arv(int arc, char **arv)
 		if (!(is_valid_nb(arv[i])))
 		{
 			printf("not valid nb");
+			exit(1);
 		}
 		i++;
 	}
