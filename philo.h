@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/04 13:26:41 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/05 12:25:35 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int				id;
-	pthread_t		*thread;
+	pthread_t		thread;
 	pthread_mutex_t	*l_chopstick;
 	pthread_mutex_t	*r_chopstick;
 }	t_philo;
@@ -40,4 +40,5 @@ t_data	*parsing_arv(int arc, char **arv);
 t_data	*init_data(void);
 t_data	*fill_data(char **arv);
 
+void	fill_philo(t_data *data);
 #endif
