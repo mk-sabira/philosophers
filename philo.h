@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/05 12:25:35 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/06 12:14:12 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,56 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <stdlib.h>
+# include <stdbool.h>
 
-typedef struct s_data
+# define RESET "\033[0m"
+# define RED "\033[31m"
+# define GREEN "\033[32m"
+# define YELLOW "\033[33m"
+# define BLUE "\033[34m"
+
+typedef struct s_table t_table;
+
+typedef	struct s_chopstick
 {
-	int	nb_philo;
-	int	die;
-	int	eat;
-	int	sleep;
-	int	each_ph;
-}	t_data;
+	pthread_mutex_t	chopstick;
+	int 			chop_id;
+}	t_chopstick;
 
 typedef struct s_philo
 {
-	int				id;
-	pthread_t		thread;
-	pthread_mutex_t	*l_chopstick;
-	pthread_mutex_t	*r_chopstick;
+	int			id;
+	long 		meal_count;
+	bool		full;
+	long		last_meal;
+	t_chopstick *l_chopstick;
+	t_chopstick *r_chopstick;
+	pthread_t		thread_id;
+	t_table		*table;
 }	t_philo;
 
-//parsing
-t_data	*parsing_arv(int arc, char **arv);
-t_data	*init_data(void);
-t_data	*fill_data(char **arv);
 
-void	fill_philo(t_data *data);
+//all inputs
+struct s_table
+{
+	long		nb_philo;
+	long		die;
+	long		eat;
+	long		sleep;
+	long		nb_meal;
+	long		start_simulation;
+	bool		end_simulation; // philo die or all full
+	t_chopstick	*chopstick;
+	t_philo 	*philo;
+};
+
+//parsing
+t_table	*parsing_arv(int arc, char **arv);
+t_table	*init_data(void);
+t_table	*fill_data(char **arv);
+
+void	fill_philo(t_table *data);
+
+//helper functions
+void    error_mess(char *str);
 #endif

@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:12:23 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/04 13:27:04 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/06 12:20:37 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@ int	is_valid_nb(char *str)
 {
 	if (!str || *str == '\0')
 		return (0);
-	if (*str == '-')
-		str++;
-	else if (*str == '+')
-		str++;
 	while (*str)
 	{
 		if (*str < '0' || *str > '9')
@@ -29,7 +25,7 @@ int	is_valid_nb(char *str)
 	return (1);
 }
 
-int	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	long long	r;
 	long long	x;
@@ -58,41 +54,53 @@ int	ft_atoi(const char *str)
 	return (r);
 }
 
-t_data	*init_data(void)
+t_table	*init_data(void)
 {
-	t_data	*data;
+	t_table	*table;
 
-	data = malloc(sizeof(t_data));
-	if (!data)
+	table = malloc(sizeof(t_table));
+	if (!table)
 	{
 		printf("Eroor\n");
 		exit(1);
 	}
-	data->nb_philo = 0;
-	data->die = 0;
-	data->eat = 0;
-	data->sleep = 0;
-	data->each_ph = 0;
-	return (data);
+	table->nb_philo = 0;
+	table->die = 0;
+	table->eat = 0;
+	table->sleep = 0;
+	table->nb_meal = 0;
+	return (table);
 }
 
-t_data	*fill_data(char **arv)
+t_table	*fill_data(char **arv)
 {
-	t_data	*data;
+	t_table	*table;
 
-	data = init_data();
-	data->nb_philo = ft_atoi(arv[1]);
-	data->die = ft_atoi(arv[2]);
-	data->eat = ft_atoi(arv[3]);
-	data->sleep = ft_atoi(arv[4]);
-	data->each_ph = ft_atoi(arv[5]);
-	return (data);
+	table = init_data();
+	table->nb_philo = ft_atoi(arv[1]);
+	if (ft_atoi(arv[2]) < 60 || ft_atoi(arv[3]) < 60 || ft_atoi(arv[4]) < 60)
+	{
+		printf ("can not be less than 60ms\n");
+		free(table);
+		exit (1);
+	}
+	else
+	{
+		table->die = ft_atoi(arv[2]) * 1e3;
+		table->eat = ft_atoi(arv[3]) * 1e3;
+		table->sleep = ft_atoi(arv[4]) * 1e3;	
+	}
+	if (arv[5])
+		table->nb_meal = ft_atoi(arv[5]);
+	else
+		table->nb_meal = -1;
+	return (table);
 }
 
-t_data	*parsing_arv(int arc, char **arv)
+t_table	*parsing_arv(int arc, char **arv)
 {
 	int		i;
-	t_data	*data;
+	t_table	*table;
 
 	i = 1;
 	while (i < arc)
@@ -104,6 +112,6 @@ t_data	*parsing_arv(int arc, char **arv)
 		}
 		i++;
 	}
-	data = fill_data(arv);
-	return (data);
+	table = fill_data(arv);
+	return (table);
 }

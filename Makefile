@@ -6,7 +6,7 @@
 #    By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/04 09:40:21 by bmakhama          #+#    #+#              #
-#    Updated: 2024/08/05 10:56:33 by bmakhama         ###   ########.fr        #
+#    Updated: 2024/08/06 12:14:56 by bmakhama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CFLAGS = -Wall -Werror -Wextra
 
 NAME = philo
 
-SRC = philo.c parsing_arv.c create_philos.c
+SRC = philo.c helper_func.c parsing_arv.c
 
 OBJ = ${SRC:.c=.o}
 
