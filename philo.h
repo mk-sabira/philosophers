@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/06 12:14:12 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:12:54 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef	struct s_chopstick
 
 typedef struct s_philo
 {
-	int			id;
+	long			id;
 	long 		meal_count;
 	bool		full;
 	long		last_meal;
@@ -61,12 +61,18 @@ struct s_table
 };
 
 //parsing
-t_table	*parsing_arv(int arc, char **arv);
-t_table	*init_data(void);
-t_table	*fill_data(char **arv);
-
-void	fill_philo(t_table *data);
+t_table *parsing_arv(int arc, char **arv);
+t_table    *init_table(void);
+t_table	*fill_table_struct(char **arv, t_table	*table);
+void    *philo_routine(void *arg);
 
 //helper functions
+long	ft_atoi(const char *str);
 void    error_mess(char *str);
+// void    cancel_threads(t_table *table);
+// void	destroy_mutex(t_table *table);
+
+
+// delete later
+void print_table(t_table *table);
 #endif
