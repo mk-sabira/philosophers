@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 10:40:09 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/07 15:30:29 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:38:15 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ void    error_mess(char *str)
 // 	free(table->philo);
 // }
 
-// void    destroy_mutex(t_table *table)
-// {
-// 	int i;
+void    destroy_mutex(t_table *table)
+{
+	int i;
 
-// 	i = 0;
-// 	while (i < table->nb_philo)
-// 	{
-// 		pthread_mutex_destroy(table->chopstick[i].chopstick);
-// 		i++;
-// 	}
-// 	free(table->chopstick);
-// }
+	i = 0;
+	while (i < table->nb_philo)
+	{
+		pthread_mutex_destroy(&table->chopstick[i].chopstick);
+		i++;
+	}
+	free(table->chopstick);
+}
