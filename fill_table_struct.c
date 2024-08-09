@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:26:50 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/07 17:07:18 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:54:42 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_table    *init_table(void)
 t_table	*fill_table_struct(char **arv, t_table	*table)
 {
 	table = init_table();
+    int i = 0;
 	
     table->nb_philo = ft_atoi(arv[1]);
 	if (ft_atoi(arv[2]) < 60 || ft_atoi(arv[3]) < 60 || ft_atoi(arv[4]) < 60)
@@ -96,6 +97,11 @@ t_table	*fill_table_struct(char **arv, t_table	*table)
 		table->nb_meal = -1;
     table->chopstick = init_chopstick(table->nb_philo);
 	table->philo = init_philos(table);
+    while (i < table->nb_philo)
+	{
+		table->philo[i].last_meal = get_current_time();
+		i++;
+	}
 	return (table);
 }
 

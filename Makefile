@@ -6,12 +6,12 @@
 #    By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/04 09:40:21 by bmakhama          #+#    #+#              #
-#    Updated: 2024/08/08 13:22:16 by bmakhama         ###   ########.fr        #
+#    Updated: 2024/08/09 12:10:33 by bmakhama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra 
 
 NAME = philo
 

@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/08 16:38:24 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/09 10:43:06 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ struct s_table
 	long		sleep;
 	long		nb_meal;
 	long		start_simulation;
+	bool		simulation_started;
 	bool		end_simulation; // philo die or all full
 	t_chopstick	*chopstick;
 	t_philo 	*philo;

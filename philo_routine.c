@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/08 16:01:33 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:37:09 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,13 @@ void *philo_routine(void *arg)
 {
     t_philo *philo;
     t_table *table;
+    // int i = 0;
 
     philo = (t_philo *) arg;
     table = philo->table;
-
     while (!table->start_simulation)
         usleep(100);
-    philo->last_meal = get_current_time();
-    printf("Philo %ld starts with Last Meal Time: %ld\n", philo->id, philo->last_meal);
-
+    // philo->last_meal = get_current_time();
     while (!table->end_simulation)
     {
         print_info(table, philo->id, "is thinking 🧐", YELLOW);
@@ -54,9 +52,9 @@ void *philo_routine(void *arg)
         print_info(table, philo->id, "has taken a right chopstick", BLUE);
         
         print_info(table, philo->id, "has started eating🥢", GREEN);
-        philo->last_meal = get_current_time();
         usleep(table->eat);
         philo->meal_count++;
+        philo->last_meal = get_current_time();
         
         pthread_mutex_unlock(&philo->l_chopstick->chopstick);
         print_info(table, philo->id, "put down the left chopstick", BLUE);
