@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:21:51 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/09 12:33:43 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/11 12:47:31 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,35 @@ void *monitor_routine(void *arg)
     t_table *table;
     int i;
     long    time_last_meal;
-    long die_time_in_microseconds;
-    long    current_time;
+    bool ate_enough;
 
     table = (t_table *) arg;
-    die_time_in_microseconds = table->die; 
     while (!table->end_simulation)
     {
+        ate_enough = true;
         i = 0;
+        if (table->nb_philo == 1)
+            table->end_simulation = true;
         while (i < table->nb_philo)
         {
-            current_time = get_current_time();
-            time_last_meal = current_time - table->philo[i].last_meal;
-            // printf("last: %ld\n", table->philo[i].last_meal);
-            // printf("Philo %ld - Last Meal: %ld, Time Last Meal: %ld, Current Time: %ld, Die Time: %ld\n",
-            //             table->philo[i].id,
-            //             table->philo[i].last_meal,
-            //             time_last_meal,
-            //             current_time,
-            //             die_time_in_microseconds);
+            time_last_meal = get_current_time() - table->philo[i].last_meal;
             if (time_last_meal > table->die)
             {
-                print_info(table, table->philo[i].id, "has died💥", RED);
+                print_info(table, table->philo[i].id, "has died💥", RED, table->philo->meal_count, table->philo->l_chopstick->chop_id, table->philo->r_chopstick->chop_id);
                 printf("die time: %ld\n", time_last_meal);
                 table->end_simulation = true;
                 break;
             }
+            if (table->nb_meal != -1 && table->philo[i].meal_count < table->nb_meal)
+                ate_enough = false;
             i++;
         }
+        if (ate_enough && table->nb_meal != -1)
+        {
+            print_info(table, -1, "All full", WHITE, -1, table->philo->l_chopstick->chop_id, table->philo->r_chopstick->chop_id);
+            table->end_simulation = true;
+        }
+        // usleep(100);
     }
     return (NULL);
 }

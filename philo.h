@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/09 10:43:06 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/11 12:44:46 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define YELLOW "\033[33m"
 # define BLUE "\033[34m"
 # define PURPLE "\033[35m"
+# define WHITE "\033[28m"
 
 typedef struct s_table t_table;
 
@@ -69,7 +70,8 @@ t_table    *init_table(void);
 t_table	*fill_table_struct(char **arv, t_table	*table);
 void    *philo_routine(void *arg);
 long    get_current_time(void);
-void print_info(t_table *table, int id, char *mess, char *color );
+// void print_info(t_table *table, int id, char *mess, char *color, int meal_count);
+void print_info(t_table *table, int id, char *mess, char *color, int meal_count, int l_chopstick_id, int r_chopstick_id);
 void monitor_threads(t_table *table);
 
 //helper functions
@@ -77,6 +79,7 @@ long	ft_atoi(const char *str);
 void    error_mess(char *str);
 // void    cancel_threads(t_table *table);
 void	destroy_mutex(t_table *table);
+void	check_memory(t_table *table);
 
 
 // delete later

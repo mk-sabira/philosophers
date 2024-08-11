@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:05:26 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/09 12:48:07 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/11 10:21:10 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,11 @@
 int	main(int arc, char **arv)
 {
 	t_table	*table;
-	// int i = 0;
+
 	table = NULL;
 	if (arc == 5 || arc == 6)
 	{
 		table = parsing_arv(arc, arv);
-		fill_table_struct(arv, table);
-		table->start_simulation = get_current_time();
-		printf("main start_simulation:%ld\n", table->start_simulation);
 		monitor_threads(table);
 	}
 	else
