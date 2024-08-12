@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:26:50 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/11 12:46:09 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/12 12:10:43 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ t_table    *init_table(void)
 t_table	*fill_table_struct(char **arv, t_table	*table)
 {
     int i;
+    long    initial_time;
 
 	table = init_table();
 	i = 0;
@@ -96,9 +97,10 @@ t_table	*fill_table_struct(char **arv, t_table	*table)
 	else
 		table->nb_meal = -1;
     table->chopstick = init_chopstick(table->nb_philo);
-    table->start_simulation = get_current_time();
 	table->philo = init_philos(table);
+    initial_time = get_current_time();
+    table->start_simulation = get_current_time();
     while (i < table->nb_philo)
-		table->philo[i++].last_meal = get_current_time();
+		table->philo[i++].last_meal = initial_time;
 	return (table);
 }
