@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 10:40:09 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/11 12:44:36 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/13 11:39:09 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,9 @@ void	check_memory(t_table *table)
 	printf ("can not be less than 60ms\n");
 	free(table);
 	exit (1);
+}
+
+void    destroy_end_mutex(t_table *table)
+{
+	pthread_mutex_destroy(&table->end_simul_mutex);
 }

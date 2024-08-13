@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:12:23 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/07 17:13:58 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:06:23 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ t_table *parsing_arv(int arc, char **arv)
 		}
 		i++;
 	}
+	pthread_mutex_lock(&table->start_simul_mutex);
 	table = fill_table_struct(arv, table);
+	pthread_mutex_unlock(&table->start_simul_mutex);
 	return (table);
 }

@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:26:50 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/12 12:10:43 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:05:52 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,23 @@ t_philo   *init_philos(t_table *table)
         philos[i].last_meal = 0;
         philos[i].r_chopstick = &table->chopstick[(i + 1) % table->nb_philo];
         philos[i].table = table;
+        if (pthread_mutex_init(&philos[i].last_meal_mutex, NULL) != 0)
+        {
+            while (i > 0)
+                pthread_mutex_destroy(&philos[--i].last_meal_mutex);
+            free(philos);
+            error_mess("Error creating last_meal_mutex");
+        }
         if (pthread_create(&philos[i].thread_id, NULL, philo_routine, (void *)&philos[i]) != 0)
+        {
+            while (i > 0)
+                pthread_mutex_destroy(&philos[--i].last_meal_mutex);
+            free(philos);
             error_mess("Error creating threads");
+        }
         i++;
     }
+    
     return (philos);
 }
 
@@ -73,13 +86,22 @@ t_table    *init_table(void)
     table->end_simulation = false;
     table->chopstick = NULL;
     table->philo = NULL;
+    if (pthread_mutex_init(&table->end_simul_mutex, NULL) != 0)
+    {
+        free(table);
+        error_mess("Error creating end_mutex");
+    }
+    if (pthread_mutex_init(&table->start_simul_mutex, NULL) != 0)
+    {
+        free(table);
+        error_mess("Error creating start_simul_mutex");
+    }
     return (table);
 }
 
 t_table	*fill_table_struct(char **arv, t_table	*table)
 {
     int i;
-    long    initial_time;
 
 	table = init_table();
 	i = 0;
@@ -98,9 +120,10 @@ t_table	*fill_table_struct(char **arv, t_table	*table)
 		table->nb_meal = -1;
     table->chopstick = init_chopstick(table->nb_philo);
 	table->philo = init_philos(table);
-    initial_time = get_current_time();
+    pthread_mutex_lock(&table->start_simul_mutex);
     table->start_simulation = get_current_time();
+    pthread_mutex_unlock(&table->start_simul_mutex);
     while (i < table->nb_philo)
-		table->philo[i++].last_meal = initial_time;
+		table->philo[i++].last_meal = get_current_time();
 	return (table);
 }
