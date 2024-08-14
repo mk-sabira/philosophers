@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:26:50 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/13 15:05:52 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/14 19:08:34 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,16 @@ t_philo   *init_philos(t_table *table)
             free(philos);
             error_mess("Error creating last_meal_mutex");
         }
-        if (pthread_create(&philos[i].thread_id, NULL, philo_routine, (void *)&philos[i]) != 0)
+        if (pthread_mutex_init(&philos[i].meal_count_mutex, NULL) != 0)
         {
-            while (i > 0)
-                pthread_mutex_destroy(&philos[--i].last_meal_mutex);
+            while (i >= 0) // Corrected: `i >= 0` to destroy both mutexes properly
+            {
+                pthread_mutex_destroy(&philos[i].last_meal_mutex);
+                pthread_mutex_destroy(&philos[i].meal_count_mutex);
+                i--;
+            }
             free(philos);
-            error_mess("Error creating threads");
+            error_mess("Error creating meal_count_mutex");
         }
         i++;
     }
@@ -119,11 +123,23 @@ t_table	*fill_table_struct(char **arv, t_table	*table)
 	else
 		table->nb_meal = -1;
     table->chopstick = init_chopstick(table->nb_philo);
-	table->philo = init_philos(table);
     pthread_mutex_lock(&table->start_simul_mutex);
     table->start_simulation = get_current_time();
     pthread_mutex_unlock(&table->start_simul_mutex);
+	table->philo = init_philos(table);
     while (i < table->nb_philo)
 		table->philo[i++].last_meal = get_current_time();
+    i = 0;
+    while (i < table->nb_philo)
+    {
+        if (pthread_create(&table->philo[i].thread_id, NULL, philo_routine, (void *)&table->philo[i]) != 0)
+        {
+            while (i > 0)
+                pthread_mutex_destroy(&table->philo[--i].last_meal_mutex);
+            free(table->philo);
+            error_mess("Error creating threads");
+        }
+        i++;
+    }
 	return (table);
 }

@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/13 15:04:31 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/14 18:50:38 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_philo
 	pthread_t		thread_id;
 	t_table		*table;
 	pthread_mutex_t last_meal_mutex;
+	pthread_mutex_t meal_count_mutex;
 }	t_philo;
 
 

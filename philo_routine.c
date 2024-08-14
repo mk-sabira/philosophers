@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/13 15:15:28 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/14 19:14:27 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,56 +56,69 @@ void    ft_unlock_philo(t_philo *philo)
 
 void    ft_eat(t_table *table, t_philo *philo)
 {
-    // ft_lock_philo(philo);
 
     if (!get_end_simulation(table))
         print_status(table, philo->id, "is thinking 🧐", YELLOW);
-
+    ft_lock_philo(philo);
     if (!get_end_simulation(table))
         print_status(table, philo->id, "has taken a left chopstick", BLUE);
 
     if (!get_end_simulation(table))
         print_status(table, philo->id, "has taken a right chopstick", BLUE);
-    
-    
     if (!get_end_simulation(table))
     {
         print_status(table, philo->id, "has started eating🥢", GREEN);
-        usleep(table->eat);
-        philo->meal_count++;
         update_last_meal(philo, get_current_time ());
-        // printf("Philosopher %ld updated last_meal to %ld\n", philo->id,  philo->last_meal); // Debug output
+        usleep(table->eat);
+        pthread_mutex_lock(&philo->meal_count_mutex);
+        philo->meal_count++;
+        pthread_mutex_unlock(&philo->meal_count_mutex);
     }
-    
     if (!get_end_simulation(table))
         print_status(table, philo->id, "put down the left chopstick", BLUE);
     
     if (!get_end_simulation(table))
         print_status(table, philo->id, "put down the right chopstick", BLUE);
-    // ft_unlock_philo(philo);
+    ft_unlock_philo(philo);
 }
 
 
 void    ft_sleep(t_table *table, t_philo *philo)
 {
-    // ft_lock_philo(philo);
     if (!get_end_simulation(table))
     {
         print_status(table, philo->id, "is sleeping 😴", PURPLE);
         usleep(table->sleep);
     }
-    // ft_unlock_philo(philo);
+}
+
+bool all_full(t_philo *philo, t_table *table)
+{
+    int i = 0;
+    bool full = true;
+
+    while ((i < table->nb_philo))
+    {
+        pthread_mutex_lock(&philo[i].meal_count_mutex);
+        if (philo[i].meal_count < table->nb_meal)
+            full = false;
+        pthread_mutex_unlock(&philo[i].meal_count_mutex);
+        if (!full)
+            return false;
+        i++;
+    }
+    return true;
 }
 
 void *philo_routine(void *arg)
 {
-    printf("called\n");
     t_philo *philo;
     t_table *table;
 
     philo = (t_philo *) arg;
     table = philo->table;
-    // while (!table->end_simulation);
+    if (philo->id % 2 == 0)
+        usleep(table->eat / 2);
     while (!get_end_simulation(table))
     {
         if (!get_end_simulation(table))
@@ -114,6 +127,13 @@ void *philo_routine(void *arg)
         }
         if (!get_end_simulation(table))
             ft_sleep(table, philo);
+            
+        if ((table->nb_meal != -1) && all_full(table->philo, table)) 
+        {
+            printf("Philosopher %ld has eaten %ld times.\n", philo->id, philo->meal_count);
+            set_end_simulation(table, true);
+            
+        }
     }
     return (NULL);
 }
