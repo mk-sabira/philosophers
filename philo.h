@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/14 18:50:38 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/15 11:02:55 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ typedef struct s_philo
 	long 		meal_count;
 	bool		full;
 	long		last_meal;
+	bool eating;
 	t_chopstick *l_chopstick;
 	t_chopstick *r_chopstick;
 	pthread_t		thread_id;
 	t_table		*table;
 	pthread_mutex_t last_meal_mutex;
 	pthread_mutex_t meal_count_mutex;
+	pthread_mutex_t eating_mutex;
 }	t_philo;
 
 
@@ -95,6 +97,8 @@ void	check_memory(t_table *table);
 void    set_end_simulation(t_table *table, bool value);
 bool	get_end_simulation(t_table *table);
 void	update_last_meal(t_philo *philo, long time);
+void 	lock_eating_mutex(t_philo *philo, bool value);
+void unlock_eating_mutex(t_philo *philo, bool value);
 
 // delete later
 void print_table(t_table *table);

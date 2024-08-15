@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:21:51 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/14 19:07:52 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/15 14:37:13 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,22 @@ void *monitor_routine(void *arg)
             pthread_mutex_lock(&table->philo[i].last_meal_mutex);
             time_last_meal = get_current_time() - table->philo[i].last_meal;
             pthread_mutex_unlock(&table->philo[i].last_meal_mutex);
-            if (time_last_meal > table->die)
+            
+            pthread_mutex_lock(&table->philo[i].eating_mutex);
+            if (!(table->philo[i].eating) && (time_last_meal > table->die))
             {
+                pthread_mutex_unlock(&table->philo[i].eating_mutex);
                 set_end_simulation(table, true);
                 print_status(table, table->philo[i].id, "has died💥", RED);
                 printf("died at: %ld\n", time_last_meal);
                 break ;
             }
+            pthread_mutex_unlock(&table->philo[i].eating_mutex);
+
             i++;
         }
+        if (get_end_simulation(table))
+            break;
     }
     return (NULL);
 }

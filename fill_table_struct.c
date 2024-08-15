@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:26:50 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/14 19:08:34 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/15 12:51:43 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ t_philo   *init_philos(t_table *table)
         philos[i].id = i;
         philos[i].meal_count = 0;
         philos[i].full = false;
-        philos[i].l_chopstick = &table->chopstick[i];
         philos[i].last_meal = 0;
+        philos[i].eating = false;
+        philos[i].l_chopstick = &table->chopstick[i];
         philos[i].r_chopstick = &table->chopstick[(i + 1) % table->nb_philo];
         philos[i].table = table;
         if (pthread_mutex_init(&philos[i].last_meal_mutex, NULL) != 0)
@@ -58,7 +59,7 @@ t_philo   *init_philos(t_table *table)
         }
         if (pthread_mutex_init(&philos[i].meal_count_mutex, NULL) != 0)
         {
-            while (i >= 0) // Corrected: `i >= 0` to destroy both mutexes properly
+            while (i >= 0)
             {
                 pthread_mutex_destroy(&philos[i].last_meal_mutex);
                 pthread_mutex_destroy(&philos[i].meal_count_mutex);
@@ -66,6 +67,17 @@ t_philo   *init_philos(t_table *table)
             }
             free(philos);
             error_mess("Error creating meal_count_mutex");
+        }
+        if  (pthread_mutex_init(&philos[i].eating_mutex, NULL) != 0)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                pthread_mutex_destroy(&philos[j].last_meal_mutex);
+                pthread_mutex_destroy(&philos[j].meal_count_mutex);
+                pthread_mutex_destroy(&philos[j].eating_mutex);
+            }
+            free(philos);
+            error_mess("Error creating eating_mutex");
         }
         i++;
     }
@@ -79,8 +91,7 @@ t_table    *init_table(void)
 
     table = malloc(sizeof(t_table));
     if (!table)
-        error_mess("Error allocating table");
-    
+        error_mess("Error allocating table");  
     table->nb_philo = 0;
     table->die = 0;
     table->eat = 0;
@@ -114,9 +125,9 @@ t_table	*fill_table_struct(char **arv, t_table	*table)
         check_memory(table);
 	else
 	{
-		table->die = ft_atoi(arv[2]) * 1e3;
-		table->eat = ft_atoi(arv[3]) * 1e3;
-		table->sleep = ft_atoi(arv[4]) * 1e3;	
+		table->die = ft_atoi(arv[2]);
+		table->eat = ft_atoi(arv[3]);
+		table->sleep = ft_atoi(arv[4]);	
 	}
 	if (arv[5])
 		table->nb_meal = ft_atoi(arv[5]);
