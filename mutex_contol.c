@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 13:52:43 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/15 14:08:19 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/16 12:30:00 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ bool	get_end_simulation(t_table *table)
 	return (result);
 }
 
-void	update_last_meal(t_philo *philo, long time)
+void update_last_meal(t_philo *philo, long current_time)
 {
-	pthread_mutex_lock(&philo->last_meal_mutex);
-	philo->last_meal = time;
-	pthread_mutex_unlock(&philo->last_meal_mutex);
+    pthread_mutex_lock(&philo->last_meal_mutex);
+    philo->last_meal = current_time;
+    pthread_mutex_unlock(&philo->last_meal_mutex);
 }
 
 void lock_eating_mutex(t_philo *philo, bool value)

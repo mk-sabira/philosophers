@@ -6,11 +6,31 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:21:51 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/15 14:37:13 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/16 12:27:43 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+bool all_philo_alive(t_table *table)
+{
+    int i;
+
+    i = 0;
+    while (i < table->nb_philo)
+    {
+        pthread_mutex_lock(&table->philo[i].last_meal_mutex);
+        long last_meal = get_current_time() - table->philo[i].last_meal;
+        pthread_mutex_unlock(&table->philo[i].last_meal_mutex);
+
+        if (last_meal > table->die)
+        {
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
 
 void *monitor_routine(void *arg)
 {

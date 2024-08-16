@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/15 11:02:55 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/16 10:48:49 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void print_chopstick_info(t_table *table, int id, int meal_count, int l_chopstic
 
 
 void monitor_threads(t_table *table);
+bool all_philo_alive(t_table *table);
 
 //helper functions
 long	ft_atoi(const char *str);
