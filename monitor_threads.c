@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:21:51 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/16 12:27:43 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/18 11:56:45 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ bool all_philo_alive(t_table *table)
 
         if (last_meal > table->die)
         {
+            print_status(table, table->philo[i].id, "starvation", RED);
+            set_end_simulation(table, true);
             return false;
         }
         i++;
@@ -41,6 +43,7 @@ void *monitor_routine(void *arg)
     table = (t_table *) arg;
     while (!get_end_simulation(table))
     {
+        
         i = 0;
         while (i < table->nb_philo)
         {
@@ -52,13 +55,13 @@ void *monitor_routine(void *arg)
             if (!(table->philo[i].eating) && (time_last_meal > table->die))
             {
                 pthread_mutex_unlock(&table->philo[i].eating_mutex);
+                
                 set_end_simulation(table, true);
                 print_status(table, table->philo[i].id, "has died💥", RED);
                 printf("died at: %ld\n", time_last_meal);
                 break ;
             }
             pthread_mutex_unlock(&table->philo[i].eating_mutex);
-
             i++;
         }
         if (get_end_simulation(table))

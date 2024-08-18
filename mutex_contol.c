@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 13:52:43 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/16 12:30:00 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/18 11:30:36 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void    set_end_simulation(t_table *table, bool value)
 bool	get_end_simulation(t_table *table)
 {
 	bool result;
+
 	pthread_mutex_lock(&table->end_simul_mutex);
 	result = table->end_simulation;
 	pthread_mutex_unlock(&table->end_simul_mutex);

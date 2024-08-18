@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/16 12:35:29 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/18 11:53:50 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,9 @@ void print_event(t_table *table, int id, char *mess, char *color)
 
 void    ft_eat(t_table *table, t_philo *philo)
 {
-    int interval = 100;
-    long checker = 0;
+    int interval = 500;
+    long elapsed_time;
     long time_eat;
-
-    bool alive = true;
 
     if (get_end_simulation(table))
         return;
@@ -72,7 +70,8 @@ void    ft_eat(t_table *table, t_philo *philo)
         
         // usleep(table->eat * 1000);
         time_eat = table->eat * 1000;
-        while (checker < time_eat)
+        elapsed_time = 0;
+        while (elapsed_time < time_eat)
         {
             update_last_meal(philo, get_current_time ());
             if (get_end_simulation(table))
@@ -83,17 +82,15 @@ void    ft_eat(t_table *table, t_philo *philo)
             }
 
             usleep(interval);
-            checker += interval;
-            alive = all_philo_alive(table);
-            if (!alive)
+            elapsed_time += interval;
+
+            if (!all_philo_alive(table))
             {
                 unlock_eating_mutex(philo, false);
                 unlock_chopsticks(philo);
-                set_end_simulation(table, true);
-                // print_status(table, table->philo->id, "starvation", RED);
-                // printf("Philosopher %ld starvation detected. Last meal: %ld\n",
-                //        philo->id, get_current_time() - philo->last_meal);
-                return;;
+                
+                // set_end_simulation(table, true);
+                return ;
             }
         }
         unlock_eating_mutex(philo, false);
@@ -141,6 +138,12 @@ bool all_full(t_philo *philo, t_table *table)
     return true;
 }
 
+void ft_one_philo(t_philo *philo)
+{
+    printf("here\n");
+    pthread_mutex_lock(&philo->l_chopstick->chopstick);
+    pthread_mutex_unlock(&philo->l_chopstick->chopstick);
+}
 void *philo_routine(void *arg)
 {
     t_philo *philo;
@@ -150,9 +153,12 @@ void *philo_routine(void *arg)
     table = philo->table;
     // if (philo->id % 2 == 0)
     //     usleep(table->eat / 2);
+    if (table->nb_philo == 1)
+        ft_one_philo(philo);
     while (!get_end_simulation(table))
     {
-        ft_eat(table, philo);
+        if (!get_end_simulation(table))
+            ft_eat(table, philo);
         if (!get_end_simulation(table))
             ft_sleep(table, philo);  
         if ((table->nb_meal != -1) && all_full(table->philo, table)) 
