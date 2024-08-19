@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/18 11:53:50 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:47:52 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void print_status(t_table *table, int id, char *mess, char *color)
     printf("%s%ld %d %s%s\n", color, timestamp, id, mess, RESET);
 }
 
+void print_event(t_table *table, int id, char *mess, char *color)
+{
+	if (!get_end_simulation(table))
+        print_status(table, id, mess, color);
+}
 void    lock_chopsticks(t_philo *philo)
 {
     pthread_mutex_lock(&philo->l_chopstick->chopstick);
@@ -43,26 +48,20 @@ void    unlock_chopsticks(t_philo *philo)
     pthread_mutex_unlock(&philo->r_chopstick->chopstick);
 }
 
-void print_event(t_table *table, int id, char *mess, char *color)
-{
-	if (!get_end_simulation(table))
-        print_status(table, id, mess, color);
-}
-
-
 void    ft_eat(t_table *table, t_philo *philo)
 {
-    int interval = 500;
+    int interval = 100;
     long elapsed_time;
     long time_eat;
 
     if (get_end_simulation(table))
         return;
-    print_event(table, philo->id, "is thinking 🧐", YELLOW);
     lock_chopsticks(philo);
-
-    print_event(table, philo->id, "has taken a left chopstick", BLUE);
-    print_event(table, philo->id, "has taken a right chopstick", BLUE);
+    if (!get_end_simulation(table))
+    {
+        print_event(table, philo->id, "has taken a left chopstick", BLUE);
+        print_event(table, philo->id, "has taken a right chopstick", BLUE);
+    }
     if (!get_end_simulation(table))
     {
         lock_eating_mutex(philo, true);
@@ -73,28 +72,23 @@ void    ft_eat(t_table *table, t_philo *philo)
         elapsed_time = 0;
         while (elapsed_time < time_eat)
         {
-            update_last_meal(philo, get_current_time ());
             if (get_end_simulation(table))
             {
                 unlock_eating_mutex(philo, false);
                 unlock_chopsticks(philo);
                 return;
             }
-
-            usleep(interval);
-            elapsed_time += interval;
-
             if (!all_philo_alive(table))
             {
                 unlock_eating_mutex(philo, false);
                 unlock_chopsticks(philo);
-                
-                // set_end_simulation(table, true);
                 return ;
             }
+            usleep(interval);
+            elapsed_time += interval;
+            update_last_meal(philo, get_current_time ());
         }
         unlock_eating_mutex(philo, false);
-        
         pthread_mutex_lock(&philo->meal_count_mutex);
         philo->meal_count++;
         pthread_mutex_unlock(&philo->meal_count_mutex);
@@ -157,6 +151,8 @@ void *philo_routine(void *arg)
         ft_one_philo(philo);
     while (!get_end_simulation(table))
     {
+        if (!get_end_simulation(table))
+            print_event(table, philo->id, "is thinking 🧐", YELLOW);
         if (!get_end_simulation(table))
             ft_eat(table, philo);
         if (!get_end_simulation(table))

@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 13:21:51 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/18 11:56:45 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:55:37 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,43 @@ bool all_philo_alive(t_table *table)
 {
     int i;
 
+    if (get_end_simulation(table))
+        return (false);
     i = 0;
     while (i < table->nb_philo)
     {
+        if (get_end_simulation(table))
+            return (false);
+    
         pthread_mutex_lock(&table->philo[i].last_meal_mutex);
+        if (get_end_simulation(table))
+        {
+            pthread_mutex_unlock(&table->philo[i].last_meal_mutex);
+            return (false);
+        }
         long last_meal = get_current_time() - table->philo[i].last_meal;
+        if (get_end_simulation(table))
+        {
+            pthread_mutex_unlock(&table->philo[i].last_meal_mutex);
+            return (false);
+        }
         pthread_mutex_unlock(&table->philo[i].last_meal_mutex);
-
+        
+        if (get_end_simulation(table))
+        {
+            return (false);
+        }
         if (last_meal > table->die)
         {
+            if (get_end_simulation(table))
+                return (false);
             print_status(table, table->philo[i].id, "starvation", RED);
             set_end_simulation(table, true);
             return false;
         }
         i++;
+        if (get_end_simulation(table))
+            return (false);
     }
     return true;
 }

@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/16 10:48:49 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:44:38 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_philo
 //all inputs
 struct s_table
 {
-	long		nb_philo;
+	int		nb_philo;
 	long		die;
 	long		eat;
 	long		sleep;
@@ -72,6 +72,7 @@ struct s_table
 
 //parsing
 t_table *parsing_arv(int arc, char **arv);
+t_philo   *init_philos(t_table *table);
 t_table    *init_table(void);
 t_table	*fill_table_struct(char **arv, t_table	*table);
 void    *philo_routine(void *arg);
@@ -92,7 +93,7 @@ void    error_mess(char *str);
 // void    cancel_threads(t_table *table);
 void	destroy_mutex(t_table *table);
 void    destroy_end_mutex(t_table *table);
-void	check_memory(t_table *table);
+void	print_free(t_table *table);
 
 // mutex control
 void    set_end_simulation(t_table *table, bool value);
