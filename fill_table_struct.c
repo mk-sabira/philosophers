@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:26:50 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/19 18:55:44 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:29:45 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,6 @@ t_table    *init_table(void)
         free(table);
         error_mess("Error creating end_mutex");
     }
-    if (pthread_mutex_init(&table->start_simul_mutex, NULL) != 0)
-    {
-        free(table);
-        error_mess("Error creating start_simul_mutex");
-    }
     return (table);
 }
 
@@ -98,12 +93,12 @@ t_table	*fill_table_struct(char **arv, t_table	*table)
     table->chopstick = init_chopstick(table->nb_philo);
 	table->philo = init_philos(table); //create data struct
     
-    pthread_mutex_lock(&table->start_simul_mutex);
+    // pthread_mutex_lock(&table->start_simul_mutex);
     table->start_simulation = get_current_time();
-    pthread_mutex_unlock(&table->start_simul_mutex);
+    // pthread_mutex_unlock(&table->start_simul_mutex);
     
     while (i < table->nb_philo)
 		table->philo[i++].last_meal = get_current_time();// afetr creating threads assign for each it's last meal
-    create_threads(table);
+    create_threads(table); 
 	return (table);
 }

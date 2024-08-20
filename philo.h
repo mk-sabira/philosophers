@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/19 17:44:38 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:29:27 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ struct s_table
 	bool		simulation_started;
 	bool		end_simulation; // philo die or all full
 	pthread_mutex_t end_simul_mutex;
-	pthread_mutex_t start_simul_mutex;
 	t_chopstick	*chopstick;
 	t_philo 	*philo;
 };

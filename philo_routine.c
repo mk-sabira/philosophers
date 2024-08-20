@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/19 18:47:52 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:35:42 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ long    get_current_time(void)
 void print_status(t_table *table, int id, char *mess, char *color)
 {
     long timestamp;
-    pthread_mutex_lock(&table->start_simul_mutex);
     timestamp = get_current_time() - table->start_simulation;
-    pthread_mutex_unlock(&table->start_simul_mutex);
     printf("%s%ld %d %s%s\n", color, timestamp, id, mess, RESET);
 }
 
@@ -50,54 +48,28 @@ void    unlock_chopsticks(t_philo *philo)
 
 void    ft_eat(t_table *table, t_philo *philo)
 {
-    int interval = 100;
-    long elapsed_time;
-    long time_eat;
-
     if (get_end_simulation(table))
         return;
     lock_chopsticks(philo);
-    if (!get_end_simulation(table))
+    print_event(table, philo->id, "has taken a left chopstick", BLUE);
+    print_event(table, philo->id, "has taken a right chopstick", BLUE);
+    if (get_end_simulation(table))
     {
-        print_event(table, philo->id, "has taken a left chopstick", BLUE);
-        print_event(table, philo->id, "has taken a right chopstick", BLUE);
+         unlock_chopsticks(philo);
+        return ;
     }
-    if (!get_end_simulation(table))
-    {
-        lock_eating_mutex(philo, true);
-        print_event(table, philo->id, "has started eating🥢", GREEN);
-        
-        // usleep(table->eat * 1000);
-        time_eat = table->eat * 1000;
-        elapsed_time = 0;
-        while (elapsed_time < time_eat)
-        {
-            if (get_end_simulation(table))
-            {
-                unlock_eating_mutex(philo, false);
-                unlock_chopsticks(philo);
-                return;
-            }
-            if (!all_philo_alive(table))
-            {
-                unlock_eating_mutex(philo, false);
-                unlock_chopsticks(philo);
-                return ;
-            }
-            usleep(interval);
-            elapsed_time += interval;
-            update_last_meal(philo, get_current_time ());
-        }
-        unlock_eating_mutex(philo, false);
-        pthread_mutex_lock(&philo->meal_count_mutex);
-        philo->meal_count++;
-        pthread_mutex_unlock(&philo->meal_count_mutex);
-    }
-    if (!get_end_simulation(table))
-    {
-        print_event(table, philo->id, "put down the left chopstick", BLUE);
-        print_event(table, philo->id, "put down the right chopstick", BLUE);
-    }
+    print_event(table, philo->id, "has started eating🥢", GREEN);
+    usleep(table->eat * 1000);
+    lock_eating_mutex(philo, true);
+    unlock_eating_mutex(philo, false);
+    update_last_meal(philo, get_current_time ());
+
+    pthread_mutex_lock(&philo->meal_count_mutex);
+    philo->meal_count++;
+    pthread_mutex_unlock(&philo->meal_count_mutex);
+
+    print_event(table, philo->id, "put down the left chopstick", BLUE);
+    print_event(table, philo->id, "put down the right chopstick", BLUE);
     
     unlock_chopsticks(philo);
 }
@@ -145,14 +117,12 @@ void *philo_routine(void *arg)
 
     philo = (t_philo *) arg;
     table = philo->table;
-    // if (philo->id % 2 == 0)
-    //     usleep(table->eat / 2);
+
     if (table->nb_philo == 1)
         ft_one_philo(philo);
     while (!get_end_simulation(table))
     {
-        if (!get_end_simulation(table))
-            print_event(table, philo->id, "is thinking 🧐", YELLOW);
+        print_event(table, philo->id, "is thinking 🧐", YELLOW);
         if (!get_end_simulation(table))
             ft_eat(table, philo);
         if (!get_end_simulation(table))
