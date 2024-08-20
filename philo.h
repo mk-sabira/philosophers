@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/20 13:29:27 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:56:42 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ typedef struct s_philo
 }	t_philo;
 
 
-//all inputs
 struct s_table
 {
 	int		nb_philo;
@@ -63,7 +62,7 @@ struct s_table
 	long		nb_meal;
 	long		start_simulation;
 	bool		simulation_started;
-	bool		end_simulation; // philo die or all full
+	bool		end_simulation;
 	pthread_mutex_t end_simul_mutex;
 	t_chopstick	*chopstick;
 	t_philo 	*philo;
@@ -76,23 +75,18 @@ t_table    *init_table(void);
 t_table	*fill_table_struct(char **arv, t_table	*table);
 void    *philo_routine(void *arg);
 long    get_current_time(void);
-// void print_info(t_table *table, int id, char *mess, char *color, int meal_count);
 
 //print
 void print_status(t_table *table, int id, char *mess, char *color);
-void print_chopstick_info(t_table *table, int id, int meal_count, int l_chopstick_id, int r_chopstick_id);
-
-
-void monitor_threads(t_table *table);
-bool all_philo_alive(t_table *table);
 
 //helper functions
 long	ft_atoi(const char *str);
 void    error_mess(char *str);
-// void    cancel_threads(t_table *table);
+
 void	destroy_mutex(t_table *table);
 void    destroy_end_mutex(t_table *table);
 void	print_free(t_table *table);
+void	join_child_threads(t_table *table);
 
 // mutex control
 void    set_end_simulation(t_table *table, bool value);
@@ -101,6 +95,4 @@ void	update_last_meal(t_philo *philo, long time);
 void 	lock_eating_mutex(t_philo *philo, bool value);
 void unlock_eating_mutex(t_philo *philo, bool value);
 
-// delete later
-void print_table(t_table *table);
 #endif

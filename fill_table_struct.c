@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 12:26:50 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/20 13:29:45 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:55:26 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,25 +55,6 @@ t_table    *init_table(void)
     return (table);
 }
 
-void create_threads(t_table *table)
-{
-    int i;
-
-    i = 0;
-    while (i < table->nb_philo)
-    {
-        
-        if (pthread_create(&table->philo[i].thread_id, NULL, philo_routine, (void *)&table->philo[i]) != 0)
-        {
-            while (i > 0)
-                pthread_mutex_destroy(&table->philo[--i].last_meal_mutex);
-            free(table->philo);
-            error_mess("Error creating threads");
-        }
-        i++;
-    }
-}
-
 t_table	*fill_table_struct(char **arv, t_table	*table)
 {
     int i;
@@ -91,14 +72,6 @@ t_table	*fill_table_struct(char **arv, t_table	*table)
 	else
 		table->nb_meal = -1;
     table->chopstick = init_chopstick(table->nb_philo);
-	table->philo = init_philos(table); //create data struct
-    
-    // pthread_mutex_lock(&table->start_simul_mutex);
-    table->start_simulation = get_current_time();
-    // pthread_mutex_unlock(&table->start_simul_mutex);
-    
-    while (i < table->nb_philo)
-		table->philo[i++].last_meal = get_current_time();// afetr creating threads assign for each it's last meal
-    create_threads(table); 
+	table->philo = init_philos(table);
 	return (table);
 }

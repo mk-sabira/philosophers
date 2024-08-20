@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 13:52:43 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/18 11:30:36 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:01:01 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,14 @@ void lock_eating_mutex(t_philo *philo, bool value)
 {
 	pthread_mutex_lock(&philo->eating_mutex);
 	philo->eating = value;
+	pthread_mutex_unlock(&philo->eating_mutex);
+
 }
 
 void unlock_eating_mutex(t_philo *philo, bool value)
 {
+	pthread_mutex_lock(&philo->eating_mutex);
+	
 	philo->eating = value;
 	pthread_mutex_unlock(&philo->eating_mutex);
 }

@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/20 13:35:42 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:21:14 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void    unlock_chopsticks(t_philo *philo)
     pthread_mutex_unlock(&philo->r_chopstick->chopstick);
 }
 
+
 void    ft_eat(t_table *table, t_philo *philo)
 {
     if (get_end_simulation(table))
@@ -59,9 +60,12 @@ void    ft_eat(t_table *table, t_philo *philo)
         return ;
     }
     print_event(table, philo->id, "has started eating🥢", GREEN);
-    usleep(table->eat * 1000);
+
     lock_eating_mutex(philo, true);
+    usleep(table->eat * 1000);
     unlock_eating_mutex(philo, false);
+    
+
     update_last_meal(philo, get_current_time ());
 
     pthread_mutex_lock(&philo->meal_count_mutex);
