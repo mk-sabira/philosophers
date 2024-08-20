@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/20 14:21:14 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:33:05 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,8 @@
 long    get_current_time(void)
 {
     struct  timeval time;
-    long    milli_sec;
-
     gettimeofday(&time, NULL);
-    milli_sec = (time.tv_sec * 1000) + (time.tv_usec / 1000); 
-    return (milli_sec);
+    return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
 void print_status(t_table *table, int id, char *mess, char *color)
