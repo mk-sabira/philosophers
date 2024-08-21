@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:12:23 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/20 13:28:32 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/21 10:49:14 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ long	ft_atoi(const char *str)
 	return (r);
 }
 
-t_table *parsing_arv(int arc, char **arv)
+t_table	*parsing_arv(int arc, char **arv)
 {
 	int		i;
 	t_table	*table;
