@@ -6,7 +6,7 @@
 #    By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/04 09:40:21 by bmakhama          #+#    #+#              #
-#    Updated: 2024/08/21 11:03:31 by bmakhama         ###   ########.fr        #
+#    Updated: 2024/08/21 11:52:48 by bmakhama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ LDFLAGS = -lpthread
 
 NAME = philo
 
-SRC = philo.c helper_func.c parsing_arv.c fill_table_struct.c philo_routine.c \
-	 mutex_contol.c
+SRC = philo.c helper_func.c parsing_arv.c fill_table_struct.c print_event.c \
+	philo_routine.c mutex_contol.c
 
 OBJ = ${SRC:.c=.o}
 

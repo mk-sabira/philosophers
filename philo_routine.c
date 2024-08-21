@@ -6,45 +6,11 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/21 10:53:37 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:51:20 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-long	get_current_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
-
-void	print_status(t_table *table, int id, char *mess, char *color)
-{
-	long	timestamp;
-
-	timestamp = get_current_time() - table->start_simulation;
-	printf("%s%ld %d %s%s\n", color, timestamp, id, mess, RESET);
-}
-
-void	print_event(t_table *table, int id, char *mess, char *color)
-{
-	if (!get_end_simulation(table))
-		print_status(table, id, mess, color);
-}
-
-void	lock_chopsticks(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->l_chopstick->chopstick);
-	pthread_mutex_lock(&philo->r_chopstick->chopstick);
-}
-
-void	unlock_chopsticks(t_philo *philo)
-{
-	pthread_mutex_unlock(&philo->l_chopstick->chopstick);
-	pthread_mutex_unlock(&philo->r_chopstick->chopstick);
-}
 
 void	ft_eat(t_table *table, t_philo *philo)
 {
@@ -70,6 +36,18 @@ void	ft_eat(t_table *table, t_philo *philo)
 	print_event(table, philo->id, "put down the right chopstick", BLUE);
 	unlock_chopsticks(philo);
 }
+// void	ft_usleep(t_table *table)
+// {
+// 	// int count = 0;
+// 	wake_up_time = get_current_time() + table->eat;
+// 	while (get_current_time() < wake_up_time)
+// 	// while (count < tbale->eat)
+// 	{
+// 		usleep (100);
+// 		// count++;
+// 		// count += count;
+// 	}
+// }
 
 void	ft_sleep(t_table *table, t_philo *philo)
 {
@@ -102,11 +80,23 @@ bool	all_full(t_philo *philo, t_table *table)
 	return (true);
 }
 
-void	ft_one_philo(t_philo *philo)
+void	ft_one_philo(t_table *table)
 {
-	printf("here\n");
-	pthread_mutex_lock(&philo->l_chopstick->chopstick);
-	pthread_mutex_unlock(&philo->l_chopstick->chopstick);
+	long	last_meal;
+
+	last_meal = 0;
+	pthread_mutex_lock(&table->philo->l_chopstick->chopstick);
+	print_event(table, table->philo->id, "has taken a left chopstick", BLUE);
+	while (!table->end_simulation)
+	{
+		last_meal = get_current_time() - table->philo->last_meal;
+		if (last_meal > table->die)
+		{
+			table->end_simulation = true;
+			break ;
+		}
+	}
+	pthread_mutex_unlock(&table->philo->l_chopstick->chopstick);
 }
 
 void	*philo_routine(void *arg)
@@ -117,7 +107,7 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *) arg;
 	table = philo->table;
 	if (table->nb_philo == 1)
-		ft_one_philo(philo);
+		ft_one_philo(table);
 	while (!get_end_simulation(table))
 	{
 		print_event(table, philo->id, "is thinking 🧐", YELLOW);
@@ -127,7 +117,7 @@ void	*philo_routine(void *arg)
 			ft_sleep(table, philo);
 		if ((table->nb_meal != -1) && all_full(table->philo, table))
 		{
-			printf("philo %ld ate %ld times.\n", philo->id, philo->meal_count);
+			printf("philo %d ate %ld times.\n", philo->id, philo->meal_count);
 			set_end_simulation(table, true);
 		}
 	}

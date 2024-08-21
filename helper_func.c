@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 10:40:09 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/21 10:56:22 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:37:08 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	destroy_mutexes(t_philo *philo, int nb_philo)
 	i = 0;
 	while (i < nb_philo)
 	{
-		pthread_mutex_destroy(&philo->last_meal_mutex);
-		pthread_mutex_destroy(&philo->meal_count_mutex);
-		pthread_mutex_destroy(&philo->eating_mutex);
+		pthread_mutex_destroy(&philo[i].last_meal_mutex);
+		pthread_mutex_destroy(&philo[i].meal_count_mutex);
+		pthread_mutex_destroy(&philo[i].eating_mutex);
 		i++;
 	}
 }

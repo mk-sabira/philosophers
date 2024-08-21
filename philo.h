@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/21 11:05:37 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:35:19 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_chopstick
 
 typedef struct s_philo
 {
-	long			id;
+	int				id;
 	long			meal_count;
 	bool			full;
 	long			last_meal;
@@ -73,6 +73,7 @@ void	*philo_routine(void *arg);
 long	get_current_time(void);
 
 void	print_status(t_table *table, int id, char *mess, char *color);
+void	print_event(t_table *table, int id, char *mess, char *color);
 
 long	ft_atoi(const char *str);
 void	error_mess(char *str);
@@ -88,5 +89,7 @@ bool	get_end_simulation(t_table *table);
 void	update_last_meal(t_philo *philo, long time);
 void	lock_eating_mutex(t_philo *philo, bool value);
 void	unlock_eating_mutex(t_philo *philo, bool value);
+void	lock_chopsticks(t_philo *philo);
+void	unlock_chopsticks(t_philo *philo);
 
 #endif
