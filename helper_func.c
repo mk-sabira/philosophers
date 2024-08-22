@@ -66,6 +66,7 @@ void	clean_table(t_table *table)
 			free(table->chopstick);
 		}
 		pthread_mutex_destroy(&table->end_simul_mutex);
+		pthread_mutex_destroy(&table->print_mutex);
 		free(table);
 	}
 }

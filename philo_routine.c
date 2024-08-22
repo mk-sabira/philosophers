@@ -12,11 +12,11 @@
 
 #include "philo.h"
 
-void	ft_usleep(t_table *table)
+void	ft_usleep(t_table *table, long value)
 {
 	long wake_up_time;
 	
-	wake_up_time = get_current_time() + table->eat;
+	wake_up_time = get_current_time() + value;
 	while (get_current_time() < wake_up_time)
 	{
 		if (get_end_simulation(table))
@@ -39,7 +39,7 @@ void	ft_eat(t_table *table, t_philo *philo)
 	print_event(table, philo->id, "has started eating🥢", GREEN);
 	lock_eating_mutex(philo, true);
 	// usleep(table->eat * 1000);
-    ft_usleep(table);
+    ft_usleep(table, table->eat);
 	update_last_meal(philo, get_current_time ());
 	unlock_eating_mutex(philo, false);
 	pthread_mutex_lock(&philo->meal_count_mutex);
@@ -57,7 +57,8 @@ void	ft_sleep(t_table *table, t_philo *philo)
 	if (!get_end_simulation(table))
 	{
 		print_event(table, philo->id, "is sleeping 😴", PURPLE);
-		usleep(table->sleep * 1000);
+		// usleep(table->sleep * 1000);
+		ft_usleep(table, table->sleep);
 	}
 }
 
@@ -88,16 +89,18 @@ void	ft_one_philo(t_table *table)
 	last_meal = 0;
 	pthread_mutex_lock(&table->philo->l_chopstick->chopstick);
 	print_event(table, table->philo->id, "has taken a left chopstick", BLUE);
-	while (!table->end_simulation)
+	while (!get_end_simulation(table))
 	{
+		pthread_mutex_lock(&table->philo->last_meal_mutex);
 		last_meal = get_current_time() - table->philo->last_meal;
+		pthread_mutex_unlock(&table->philo->last_meal_mutex);		
 		if (last_meal > table->die)
 		{
-			table->end_simulation = true;
+			pthread_mutex_unlock(&table->philo->l_chopstick->chopstick);
+			set_end_simulation(table, true);
 			break ;
 		}
 	}
-	pthread_mutex_unlock(&table->philo->l_chopstick->chopstick);
 }
 
 void	*philo_routine(void *arg)

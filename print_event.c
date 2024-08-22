@@ -38,12 +38,20 @@ void	print_event(t_table *table, int id, char *mess, char *color)
 
 void	lock_chopsticks(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->l_chopstick->chopstick);
-	pthread_mutex_lock(&philo->r_chopstick->chopstick);
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(&philo->r_chopstick->chopstick);
+		pthread_mutex_lock(&philo->l_chopstick->chopstick);
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->l_chopstick->chopstick);
+		pthread_mutex_lock(&philo->r_chopstick->chopstick);
+	}
 }
 
 void	unlock_chopsticks(t_philo *philo)
 {
-	pthread_mutex_unlock(&philo->l_chopstick->chopstick);
 	pthread_mutex_unlock(&philo->r_chopstick->chopstick);
+	pthread_mutex_unlock(&philo->l_chopstick->chopstick);
 }

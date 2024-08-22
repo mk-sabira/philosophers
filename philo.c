@@ -57,7 +57,6 @@ void	main_monitor(t_table *table)
 				pthread_mutex_unlock(&table->philo[i].eating_mutex);
 				set_end_simulation(table, true);
 				print_status(table, table->philo[i].id, "has died💥", RED);
-				// printf("died at: %ld\n", last_meal);
 				break ;
 			}
 			pthread_mutex_unlock(&table->philo[i].eating_mutex);
