@@ -33,6 +33,11 @@ t_table	*init_table(void)
 		free(table);
 		error_mess("Error creating end_mutex");
 	}
+	if (pthread_mutex_init(&table->print_mutex, NULL) != 0)
+	{
+		free(table);
+		error_mess("Error creating print_mutex");
+	}
 	return (table);
 }
 

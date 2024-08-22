@@ -61,6 +61,7 @@ struct s_table
 	long			start_simulation;
 	bool			end_simulation;
 	pthread_mutex_t	end_simul_mutex;
+	pthread_mutex_t	print_mutex;
 	t_chopstick		*chopstick;
 	t_philo			*philo;
 };

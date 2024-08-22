@@ -25,7 +25,9 @@ void	print_status(t_table *table, int id, char *mess, char *color)
 	long	timestamp;
 
 	timestamp = get_current_time() - table->start_simulation;
+	pthread_mutex_lock(&table->print_mutex);
 	printf("%s%ld %d %s%s\n", color, timestamp, id, mess, RESET);
+	pthread_mutex_unlock(&table->print_mutex);
 }
 
 void	print_event(t_table *table, int id, char *mess, char *color)
