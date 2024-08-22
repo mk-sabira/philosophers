@@ -12,6 +12,18 @@
 
 #include "philo.h"
 
+void	ft_usleep(t_table *table)
+{
+	long wake_up_time;
+	
+	wake_up_time = get_current_time() + table->eat;
+	while (get_current_time() < wake_up_time)
+	{
+		if (get_end_simulation(table))
+			break;
+		usleep (500);
+	}
+}
 void	ft_eat(t_table *table, t_philo *philo)
 {
 	if (get_end_simulation(table))
@@ -26,7 +38,8 @@ void	ft_eat(t_table *table, t_philo *philo)
 	}
 	print_event(table, philo->id, "has started eating🥢", GREEN);
 	lock_eating_mutex(philo, true);
-	usleep(table->eat * 1000);
+	// usleep(table->eat * 1000);
+    ft_usleep(table);
 	update_last_meal(philo, get_current_time ());
 	unlock_eating_mutex(philo, false);
 	pthread_mutex_lock(&philo->meal_count_mutex);
@@ -36,18 +49,6 @@ void	ft_eat(t_table *table, t_philo *philo)
 	print_event(table, philo->id, "put down the right chopstick", BLUE);
 	unlock_chopsticks(philo);
 }
-// void	ft_usleep(t_table *table)
-// {
-// 	// int count = 0;
-// 	wake_up_time = get_current_time() + table->eat;
-// 	while (get_current_time() < wake_up_time)
-// 	// while (count < tbale->eat)
-// 	{
-// 		usleep (100);
-// 		// count++;
-// 		// count += count;
-// 	}
-// }
 
 void	ft_sleep(t_table *table, t_philo *philo)
 {

@@ -48,8 +48,7 @@ typedef struct s_philo
 	pthread_t		thread_id;
 	t_table			*table;
 	pthread_mutex_t	last_meal_mutex;
-	pthread_mutex_t	meal_count_mutex;
-	pthread_mutex_t	eating_mutex;
+	pthread_mutex_t	meal_count_mutex;	pthread_mutex_t	eating_mutex;
 }	t_philo;
 
 struct s_table
