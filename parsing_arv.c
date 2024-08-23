@@ -6,11 +6,17 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:12:23 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/21 10:49:14 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:12:50 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	error_mess(char *str)
+{
+	printf (RED"%s\n", str);
+	exit (EXIT_FAILURE);
+}
 
 int	is_valid_nb(char *str)
 {

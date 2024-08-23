@@ -6,16 +6,38 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 10:40:09 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/21 12:37:08 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:14:11 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	error_mess(char *str)
+bool	all_full(t_philo *philo, t_table *table)
 {
-	printf (RED"%s\n", str);
-	exit (EXIT_FAILURE);
+	int		i;
+	bool	full;
+
+	i = 0;
+	full = true;
+	while ((i < table->nb_philo))
+	{
+		pthread_mutex_lock(&philo[i].meal_count_mutex);
+		if (philo[i].meal_count < table->nb_meal)
+			full = false;
+		pthread_mutex_unlock(&philo[i].meal_count_mutex);
+		if (!full)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+void	ft_is_even(t_table *table)
+{
+	if (table->nb_philo > 100)
+		usleep(table->eat * 1000);
+	else
+		usleep(table->nb_philo * 1000);
 }
 
 void	join_child_threads(t_table *table)

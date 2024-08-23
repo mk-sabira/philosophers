@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/21 12:51:20 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:14:23 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 
 void	ft_usleep(t_table *table, long value)
 {
-	long wake_up_time;
-	
+	long	wake_up_time;
+
 	wake_up_time = get_current_time() + value;
 	while (get_current_time() < wake_up_time)
 	{
 		if (get_end_simulation(table))
-			break;
+			break ;
 		usleep (500);
 	}
 }
+
 void	ft_eat(t_table *table, t_philo *philo)
 {
 	if (get_end_simulation(table))
@@ -38,9 +39,8 @@ void	ft_eat(t_table *table, t_philo *philo)
 	}
 	print_event(table, philo->id, "has started eating🥢", GREEN);
 	lock_eating_mutex(philo, true);
-	// usleep(table->eat * 1000);
-    ft_usleep(table, table->eat);
-	update_last_meal(philo, get_current_time ());
+	update_last_meal(philo, get_current_time());
+	ft_usleep(table, table->eat);
 	unlock_eating_mutex(philo, false);
 	pthread_mutex_lock(&philo->meal_count_mutex);
 	philo->meal_count++;
@@ -57,29 +57,8 @@ void	ft_sleep(t_table *table, t_philo *philo)
 	if (!get_end_simulation(table))
 	{
 		print_event(table, philo->id, "is sleeping 😴", PURPLE);
-		// usleep(table->sleep * 1000);
 		ft_usleep(table, table->sleep);
 	}
-}
-
-bool	all_full(t_philo *philo, t_table *table)
-{
-	int		i;
-	bool	full;
-
-	i = 0;
-	full = true;
-	while ((i < table->nb_philo))
-	{
-		pthread_mutex_lock(&philo[i].meal_count_mutex);
-		if (philo[i].meal_count < table->nb_meal)
-			full = false;
-		pthread_mutex_unlock(&philo[i].meal_count_mutex);
-		if (!full)
-			return (false);
-		i++;
-	}
-	return (true);
 }
 
 void	ft_one_philo(t_table *table)
@@ -93,7 +72,7 @@ void	ft_one_philo(t_table *table)
 	{
 		pthread_mutex_lock(&table->philo->last_meal_mutex);
 		last_meal = get_current_time() - table->philo->last_meal;
-		pthread_mutex_unlock(&table->philo->last_meal_mutex);		
+		pthread_mutex_unlock(&table->philo->last_meal_mutex);
 		if (last_meal > table->die)
 		{
 			pthread_mutex_unlock(&table->philo->l_chopstick->chopstick);
@@ -112,6 +91,8 @@ void	*philo_routine(void *arg)
 	table = philo->table;
 	if (table->nb_philo == 1)
 		ft_one_philo(table);
+	if (philo->id % 2 == 0)
+		ft_is_even(table);
 	while (!get_end_simulation(table))
 	{
 		print_event(table, philo->id, "is thinking 🧐", YELLOW);
@@ -121,7 +102,7 @@ void	*philo_routine(void *arg)
 			ft_sleep(table, philo);
 		if ((table->nb_meal != -1) && all_full(table->philo, table))
 		{
-			printf("philo %d ate %ld times.\n", philo->id, philo->meal_count);
+			printf("philo %d ate %ld times:\n", philo->id, philo->meal_count);
 			set_end_simulation(table, true);
 		}
 	}

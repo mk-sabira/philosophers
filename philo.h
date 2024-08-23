@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:40:14 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/21 12:35:19 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:14:53 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ typedef struct s_philo
 	pthread_t		thread_id;
 	t_table			*table;
 	pthread_mutex_t	last_meal_mutex;
-	pthread_mutex_t	meal_count_mutex;	pthread_mutex_t	eating_mutex;
+	pthread_mutex_t	meal_count_mutex;
+	pthread_mutex_t	eating_mutex;
 }	t_philo;
 
 struct s_table
@@ -66,18 +67,19 @@ struct s_table
 	t_philo			*philo;
 };
 
+long	ft_atoi(const char *str);
 t_table	*parsing_arv(int arc, char **arv);
 t_table	*init_table(void);
 t_table	*fill_table_struct(char **arv, t_table	*table);
 void	*philo_routine(void *arg);
 long	get_current_time(void);
+void	ft_is_even(t_table *table);
+bool	all_full(t_philo *philo, t_table *table);
 
 void	print_status(t_table *table, int id, char *mess, char *color);
 void	print_event(t_table *table, int id, char *mess, char *color);
 
-long	ft_atoi(const char *str);
 void	error_mess(char *str);
-
 void	destroy_mutexes(t_philo *philo, int nb_philo);
 void	destroy_end_mutex(t_table *table);
 void	print_free(t_table *table);

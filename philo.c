@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:05:26 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/21 10:57:38 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:12:24 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	main_monitor(t_table *table)
 			if (!(table->philo[i].eating) && (last_meal > table->die))
 			{
 				pthread_mutex_unlock(&table->philo[i].eating_mutex);
+				print_status(table, table->philo[i].id, "died", RED);
 				set_end_simulation(table, true);
-				print_status(table, table->philo[i].id, "has died💥", RED);
 				break ;
 			}
 			pthread_mutex_unlock(&table->philo[i].eating_mutex);
