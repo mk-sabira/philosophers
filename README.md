@@ -5,8 +5,11 @@ The Dining Philosophers Project is a classic concurrency problem that demonstrat
 
 Features
 🧩 Concurrency Management: Simulates multiple philosophers as threads, handling concurrent operations.
+
 🚫 Deadlock Prevention: Implements strategies to avoid deadlock situations where philosophers could be stuck waiting indefinitely.
+
 🍽️ Starvation Prevention: Ensures that no philosopher is permanently excluded from eating.
+
 ⚙️ Customizable Parameters: Allows setting the number of philosophers, time to think, and time to eat through configuration.
 
 
