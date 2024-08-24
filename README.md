@@ -15,6 +15,7 @@ Requirements
 - POSIX Threads Library: For thread management and synchronization.
   
 ⚙️  Installation
+
 Clone the Repository:
 git clone https://github.com/mk-sabira/philosophers.git
 
