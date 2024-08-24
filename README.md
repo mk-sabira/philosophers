@@ -17,11 +17,10 @@ Requirements
 ⚙️  Installation
 
 Clone the Repository:
-git clone https://github.com/mk-sabira/philosophers.git
+`git clone https://github.com/mk-sabira/philosophers.git`
 
 -> Navigate to the Project Directory:
-
-cd philo
+`cd philo`
 
 To build the project, use the `make` command.
 
@@ -38,7 +37,7 @@ number_of_meals: The number of meals each philosopher should eat before terminat
 
 
 Example:
+`./philo 5 800 200 200 3`
 
-./philo 5 800 200 200 3
 This will start a simulation with 5 philosophers, where each philosopher will die if they cannot eat within 800 milliseconds, will eat for 200 milliseconds, sleep for 200 milliseconds, and aim to eat 3 meals.
 
