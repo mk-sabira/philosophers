@@ -19,15 +19,13 @@ Requirements
 Clone the Repository:
 git clone https://github.com/mk-sabira/philosophers.git
 
-Navigate to the Project Directory:
+-> Navigate to the Project Directory:
 
 cd philo
 
-Build the Project:
+To build the project, use the `make` command.
 
-make
-
-Usage
+🧩 Usage: 
 
 Run the Simulation:
 
