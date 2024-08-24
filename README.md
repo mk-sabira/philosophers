@@ -3,7 +3,8 @@
 📋 Overview
 The Dining Philosophers Project is a classic concurrency problem that demonstrates issues related to synchronization, deadlock, and resource sharing in multi-threaded programming. This project simulates a scenario where philosophers alternate between thinking and eating, requiring careful management of shared resources to avoid deadlock and starvation.
 
-Features
+Features:
+
 🧩 Concurrency Management: Simulates multiple philosophers as threads, handling concurrent operations.
 
 🚫 Deadlock Prevention: Implements strategies to avoid deadlock situations where philosophers could be stuck waiting indefinitely.
