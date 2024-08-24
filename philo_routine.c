@@ -6,7 +6,7 @@
 /*   By: bmakhama <bmakhama@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 14:47:28 by bmakhama          #+#    #+#             */
-/*   Updated: 2024/08/23 11:14:23 by bmakhama         ###   ########.fr       */
+/*   Updated: 2024/08/24 12:39:45 by bmakhama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	ft_eat(t_table *table, t_philo *philo)
 	if (get_end_simulation(table))
 		return ;
 	lock_chopsticks(philo);
-	print_event(table, philo->id, "has taken a left chopstick", BLUE);
-	print_event(table, philo->id, "has taken a right chopstick", BLUE);
+	print_event(table, philo->id, "has taken a left fork", BLUE);
+	print_event(table, philo->id, "has taken a right fork", BLUE);
 	if (get_end_simulation(table))
 	{
 		unlock_chopsticks(philo);
@@ -45,8 +45,6 @@ void	ft_eat(t_table *table, t_philo *philo)
 	pthread_mutex_lock(&philo->meal_count_mutex);
 	philo->meal_count++;
 	pthread_mutex_unlock(&philo->meal_count_mutex);
-	print_event(table, philo->id, "put down the left chopstick", BLUE);
-	print_event(table, philo->id, "put down the right chopstick", BLUE);
 	unlock_chopsticks(philo);
 }
 
@@ -67,7 +65,7 @@ void	ft_one_philo(t_table *table)
 
 	last_meal = 0;
 	pthread_mutex_lock(&table->philo->l_chopstick->chopstick);
-	print_event(table, table->philo->id, "has taken a left chopstick", BLUE);
+	print_event(table, table->philo->id, "has taken a left fork", BLUE);
 	while (!get_end_simulation(table))
 	{
 		pthread_mutex_lock(&table->philo->last_meal_mutex);
